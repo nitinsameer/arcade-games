@@ -5,6 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  # Google TEST AdMob app id. Replace with your real AdMob App ID before publishing.
+  ADMOB_APP_ID: ca-app-pub-3940256099942544~3347511713
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +36,14 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Sync web files into Android project
+      - name: Configure AdMob (manifest app id + min SDK)
+        run: |
+          sed -i "s#</application>#<meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"${ADMOB_APP_ID}\"/></application>#" android/app/src/main/AndroidManifest.xml
+          sed -i 's/minSdkVersion = 22/minSdkVersion = 23/' android/variables.gradle
+          grep -n "APPLICATION_ID" android/app/src/main/AndroidManifest.xml
+          grep -n "minSdkVersion" android/variables.gradle
+
+      - name: Sync web files and plugins into Android project
         run: npx cap sync android
 
       - name: Build debug APK
