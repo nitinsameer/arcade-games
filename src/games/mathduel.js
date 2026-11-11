@@ -1,8 +1,10 @@
 /**
- * mathduel - Game module
+ * mathduel - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { mathduel as mathduelLegacy } from '../legacy/games.js';
+
 export function mathduel(el) {
-  el.innerHTML = '<p>mathduel - Coming soon</p>';
-  return () => {};
+  return mathduelLegacy(el);
 }

@@ -1,8 +1,10 @@
 /**
- * ttt2 - Game module
+ * ttt2 - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { ttt2 as ttt2Legacy } from '../legacy/games.js';
+
 export function ttt2(el) {
-  el.innerHTML = '<p>ttt2 - Coming soon</p>';
-  return () => {};
+  return ttt2Legacy(el);
 }

@@ -1,8 +1,10 @@
 /**
- * snake - Game module
+ * snake - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { snake as snakeLegacy } from '../legacy/games.js';
+
 export function snake(el) {
-  el.innerHTML = '<p>snake - Coming soon</p>';
-  return () => {};
+  return snakeLegacy(el);
 }

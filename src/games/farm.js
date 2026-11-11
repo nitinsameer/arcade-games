@@ -1,8 +1,10 @@
 /**
- * farm - Game module
+ * farm - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { farm as farmLegacy } from '../legacy/games.js';
+
 export function farm(el) {
-  el.innerHTML = '<p>farm - Coming soon</p>';
-  return () => {};
+  return farmLegacy(el);
 }

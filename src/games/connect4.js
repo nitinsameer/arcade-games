@@ -1,8 +1,10 @@
 /**
- * connect4 - Game module
+ * connect4 - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { connect4 as connect4Legacy } from '../legacy/games.js';
+
 export function connect4(el) {
-  el.innerHTML = '<p>connect4 - Coming soon</p>';
-  return () => {};
+  return connect4Legacy(el);
 }

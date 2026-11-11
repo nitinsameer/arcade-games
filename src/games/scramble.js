@@ -1,8 +1,10 @@
 /**
- * Word Scramble - Unscramble letters to form words
+ * scramble - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { scramble as scrambleLegacy } from '../legacy/games.js';
+
 export function scramble(el) {
-  el.innerHTML = '<p>Word Scramble - Coming soon</p>';
-  return () => {};
+  return scrambleLegacy(el);
 }

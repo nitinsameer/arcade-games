@@ -1,8 +1,10 @@
 /**
- * rps2 - Game module
+ * rps2 - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { rps2 as rps2Legacy } from '../legacy/games.js';
+
 export function rps2(el) {
-  el.innerHTML = '<p>rps2 - Coming soon</p>';
-  return () => {};
+  return rps2Legacy(el);
 }

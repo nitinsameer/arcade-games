@@ -1,8 +1,10 @@
 /**
- * tug - Game module
+ * tug - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { tug as tugLegacy } from '../legacy/games.js';
+
 export function tug(el) {
-  el.innerHTML = '<p>tug - Coming soon</p>';
-  return () => {};
+  return tugLegacy(el);
 }

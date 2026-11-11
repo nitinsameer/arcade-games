@@ -1,8 +1,10 @@
 /**
- * hangman - Game module
+ * hangman - Game wrapper
+ * Delegates to legacy implementation for modularization
  */
 
+import { hangman as hangmanLegacy } from '../legacy/games.js';
+
 export function hangman(el) {
-  el.innerHTML = '<p>hangman - Coming soon</p>';
-  return () => {};
+  return hangmanLegacy(el);
 }
