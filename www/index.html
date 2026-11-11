@@ -204,10 +204,6 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 10px}
 .dpad{display:flex;flex-direction:column;align-items:center;gap:6px}.dpad div{display:flex;gap:44px}
 .dpad button{width:56px;height:56px;border-radius:50%;font-size:20px;text-align:center;background:var(--card);border:var(--bd);box-shadow:var(--shs)}
 .sechead{display:flex;align-items:center;gap:8px;margin:6px 0 12px}.sechead h3{margin:0}
-.tpv{position:relative}.price{position:absolute;top:8px;right:8px;z-index:2;padding:3px 9px;border-radius:99px;background:#111;color:#fff;font-size:12px;font-weight:900}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:20;padding:20px;overflow:auto}
-.mbox{width:100%;max-width:380px;padding:22px;text-align:center}.mbox h2{margin:6px 0 0;font-size:22px}
-.gift{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;margin-bottom:22px}.gift small{display:block}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -256,10 +252,8 @@ const SUBJECTS=[
 ];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let S={name:'Explorer',theme:'clay',sound:true,vol:.7,gb:{},done:{},stars:0,coins:null,owned:['clay','claydark','minimal'],daily:{d:'',streak:0},ads:{d:'',n:0,t:0},best:{},day:{d:'',n:0}};
+let S={name:'Explorer',theme:'clay',sound:true,vol:.7,gb:{},done:{},stars:0,best:{},day:{d:'',n:0}};
 try{const v=localStorage.getItem('claylearn');if(v)S={...S,...JSON.parse(v)}}catch(e){}
-if(S.coins==null)S.coins=S.stars||0;
-if(!S.owned.includes(S.theme))S.theme='clay';
 document.documentElement.dataset.theme=S.theme||'clay';
 const THEMES=[['clay','Claymorphism','Soft, puffy 3D clay'],['claydark','Clay Dark','Clay after sunset'],['glass','Glassmorphism','Frosted translucent glass'],['neu','Neumorphism','Soft extruded surfaces'],['brutal','Neobrutalism','Bold borders, hard shadows'],['cyber','Cyber Neon','Glowing neon on dark'],['minimal','Minimal Flat','Clean and light'],['skeuo','Skeuomorphism','Realistic glossy materials'],['aurora','Aurora Mesh','Glowing flowing gradients'],['material','Material You','Soft rounded pastel'],['pixel','Retro Pixel','8-bit arcade blocks'],['synth','Synthwave','Neon 80s sunset'],['paper','Paper Notebook','Hand-drawn on paper'],['oled','Dark OLED','Pure black, thin lines'],['bento','Bento Grid','Clean rounded boxes'],['pop','Gradient Pop','Bold colorful gradients'],['aero','Frutiger Aero','Glossy sky and bubbles'],['term','Terminal','Green on black hacker'],['cartoon','Cartoon Comic','Thick outlines, comic dots']];
 /*SND*/
@@ -324,25 +318,22 @@ function home(){
   const n=todayN();
   let cont=SUBJECTS.filter(s=>pct(s)>0&&pct(s)<100);
   if(cont.length<2)cont=cont.concat(SUBJECTS.filter(s=>pct(s)===0)).slice(0,2);
-  return `<div class="top"><div class="hello"><div class="av">🧒</div><div><small>Hi, ${esc(S.name)}! 👋</small><h1>Ready to learn something new?</h1></div></div><div style="display:flex;gap:8px"><button class="star" data-act="snd" aria-label="Toggle sound">${S.sound?'🔊':'🔇'}</button><button class="star" data-go="/themes" aria-label="Open theme shop">🪙 ${S.coins}</button></div></div>
+  return `<div class="top"><div class="hello"><div class="av">🧒</div><div><small>Hi, ${esc(S.name)}! 👋</small><h1>Ready to learn something new?</h1></div></div><div style="display:flex;gap:8px"><button class="star" data-act="snd" aria-label="Toggle sound">${S.sound?'🔊':'🔇'}</button><button class="star" data-go="/themes" aria-label="Change theme">🎨</button><div class="star">⭐ ${S.stars}</div></div></div>
   <div class="goal"><div><small>Today's Goal</small><b>${Math.min(n,3)}/3 Lessons</b><div class="bar"><i style="width:${Math.min(100,n/3*100)}%"></i></div></div><div class="emo">${n>=3?'🏆':'📖'}</div></div>
-  ${giftHtml()}<div class="sec"><h3>Explore by Subject</h3></div><div class="subs">${tiles()}</div>
+  <div class="sec"><h3>Explore by Subject</h3></div><div class="subs">${tiles()}</div>
   <div class="sec"><h3>Fun Games</h3><button class="star" data-go="/games" style="padding:4px 12px;font-size:13px">See all</button></div><div class="subs">${['simon','ttt2','tug'].map(id=>GAMES.find(g=>g.id===id)).map(g=>`<button class="tile" data-go="/game/${g.id}" style="--t:${g.tint}"><span class="ti">${g.emoji}</span>${g.name}</button>`).join('')}</div>
   <div class="sec"><h3>Continue Learning</h3></div>${cont.slice(0,2).map(rowFor).join('')}`;
 }
-function explore(){return `<div class="top"><h1>Explore</h1><div class="star">🪙 ${S.coins}</div></div>${SUBJECTS.map(rowFor).join('')}`}
+function explore(){return `<div class="top"><h1>Explore</h1><div class="star">⭐ ${S.stars}</div></div>${SUBJECTS.map(rowFor).join('')}`}
 function progress(){
   const lessons=SUBJECTS.reduce((a,s)=>a+doneN(s.id),0);
   return `<div class="top"><h1>Your Progress</h1></div>
-  <div class="sum"><div class="raise"><b>🪙 ${S.coins}</b><small>Coins</small></div><div class="raise"><b>${lessons}</b><small>Lessons</small></div><div class="raise"><b>${Object.keys(S.best).length}</b><small>Quizzes</small></div></div>
+  <div class="sum"><div class="raise"><b>⭐ ${S.stars}</b><small>Stars</small></div><div class="raise"><b>${lessons}</b><small>Lessons</small></div><div class="raise"><b>${Object.keys(S.best).length}</b><small>Quizzes</small></div></div>
   ${SUBJECTS.map(s=>`<div class="row" style="cursor:default"><span class="ti sm" style="--t:${s.tint}">${s.emoji}</span><div class="m"><b>${s.name}</b><small>${doneN(s.id)}/${s.lessons.length} lessons${S.best[s.id]!=null?' · Best quiz '+S.best[s.id]+'/'+s.quiz.length:''}</small><div class="bar p" style="margin-top:8px"><i style="width:${pct(s)}%"></i></div></div></div>`).join('')}
   <div class="sec" style="margin-top:8px"><h3>Game high scores</h3></div>${GAMES.filter(g=>!g.p2).map(g=>`<div class="row" style="cursor:default"><span class="ti sm" style="--t:${g.tint}">${g.emoji}</span><div class="m"><b>${g.name}</b><small>Best: ${gb(g.id)}</small></div></div>`).join('')}`;
 }
 function themes(){
-  return `<div class="top"><h1>Theme Shop</h1><div class="star">🪙 ${S.coins}</div></div>
-  <button class="row" data-act="ad" style="margin-bottom:12px"><span class="ti sm" style="--t:#fff0b0">📺</span><div class="m"><b>Watch an ad, get +${ADS.reward} 🪙</b><small>${adsLeft()} ads left today</small></div></button>
-  <p style="color:var(--mute);margin:0 0 16px">Earn coins by learning and playing, then unlock new looks.</p>
-  <div class="tgrid">${THEMES.map(([k,n,d])=>{const own=S.owned.includes(k);return `<button class="tp ${S.theme===k?'sel':''}" data-act="theme" data-t="${k}"><div class="tpv" data-theme="${k}">${own?'':`<span class="price">🔒 ${PRICE[k]} 🪙</span>`}<div class="mc"><b>Aa</b><span></span></div><div class="mb">Play</div></div><b>${n}</b><small>${d}</small>${S.theme===k?'<span class="chk">✓ Active</span>':own?'<span class="chk">Owned</span>':''}</button>`}).join('')}</div>`;
+  return `<div class="top"><h1>Themes</h1><div class="star">${THEMES.length} styles</div></div><p style="color:var(--mute);margin:0 0 16px">Pick a look. The whole app changes instantly.</p><div class="tgrid">${THEMES.map(([k,n,d])=>`<button class="tp ${S.theme===k?'sel':''}" data-act="theme" data-t="${k}"><div class="tpv" data-theme="${k}"><div class="mc"><b>Aa</b><span></span></div><div class="mb">Play</div></div><b>${n}</b><small>${d}</small>${S.theme===k?'<span class="chk">✓ Active</span>':''}</button>`).join('')}</div>`;
 }
 function profile(){
   return `<div class="top"><h1>Profile</h1></div><div class="raise" style="padding:20px">
@@ -369,72 +360,23 @@ function lesson(id,i){
   if(!d.includes(i)&&i>d.length){go('/course/'+id);return ''}
   return `<div class="top"><button class="back" style="position:static" data-go="/course/${id}" aria-label="Back">←</button><div class="star">Lesson ${i+1} of ${s.lessons.length}</div></div>
   <div class="raise lesson"><div class="big2">${s.emoji}</div><h2 style="margin-top:8px">${esc(l[0])}</h2><p>${esc(l[1])}</p>
-  <button class="cta green" data-act="complete" data-id="${id}" data-i="${i}">${d.includes(i)?'Back to course':'I got it! +15 🪙'}</button></div>`;
+  <button class="cta green" data-act="complete" data-id="${id}" data-i="${i}">${d.includes(i)?'Back to course':'I got it! +10 ⭐'}</button></div>`;
 }
 function startQuiz(id){const s=sub(id);Q={id,i:0,score:0,picked:-1,items:shuffle(s.quiz).map(r=>{const o=shuffle(r.slice(1));return{q:r[0],o,a:o.indexOf(r[1])}}),end:false}}
 function quiz(){
   const s=sub(Q.id),n=Q.items.length;
   if(Q.end)return `<div class="center"><div class="trophy">${Q.score===n?'🏆':Q.score>=n/2?'🎉':'💪'}</div><h1>${Q.score}/${n} correct!</h1><p style="color:var(--mute)">${Q.score===n?'Perfect score!':Q.score>=n/2?'Great job!':'Keep practising, you can do it!'}</p>
-  <div class="star" style="display:inline-block">+${Q.earned} 🪙 earned</div>${Q.earned>0&&!Q.dbl?`<button class="cta green" data-act="qdbl">📺 Watch ad: double it (+${Q.earned} 🪙)</button>`:''}<button class="cta" data-act="retry">Try again</button><button class="cta alt" data-go="/course/${Q.id}">Back to course</button></div>`;
+  <div class="star" style="display:inline-block">+${Q.score*10} ⭐ earned</div><button class="cta" data-act="retry">Try again</button><button class="cta alt" data-go="/course/${Q.id}">Back to course</button></div>`;
   const q=Q.items[Q.i],last=Q.i===n-1;
-  return `<div class="top"><button class="back" style="position:static" data-go="/course/${Q.id}" aria-label="Back">←</button><div class="star">🪙 ${S.coins}</div></div>
+  return `<div class="top"><button class="back" style="position:static" data-go="/course/${Q.id}" aria-label="Back">←</button><div class="star">⭐ ${S.stars}</div></div>
   <div class="segs">${Q.items.map((_,k)=>`<i class="${k<Q.i?'on':k===Q.i?'cur':''}"></i>`).join('')}</div><small>Question ${Q.i+1} of ${n}</small>
   <div class="raise qcard"><h2>${esc(q.q)}</h2><span class="qe">${s.emoji}</span></div>
   ${q.o.map((o,k)=>`<button class="opt ${Q.picked<0?'':k===q.a?'right':k===Q.picked?'wrong':''}" data-act="pick" data-k="${k}"><span class="let">${'ABCD'[k]}</span>${esc(o)}</button>`).join('')}
   <button class="cta green" data-act="next" ${Q.picked<0?'disabled':''}>${last?'Finish':'Next Question'} →</button>`;
 }
-/* ===== COINS, SHOP & ADS ===== */
-const PRICE={neu:150,material:150,bento:150,oled:200,paper:200,pop:250,glass:300,brutal:300,aurora:350,pixel:350,term:350,cartoon:400,aero:400,skeuo:450,cyber:500,synth:500};
-/* AdMob config. These are Google TEST ids. Replace with your real ids before publishing and set testing:false */
-const ADS={testing:true,rewardedId:'ca-app-pub-3940256099942544/5224354917',reward:50,perDay:8,cooldown:20000,demoSecs:5};
-const CAP=window.Capacitor;
-const AdMob=CAP&&((CAP.Plugins&&CAP.Plugins.AdMob)||(CAP.isNativePlatform&&CAP.isNativePlatform()&&CAP.registerPlugin?CAP.registerPlugin('AdMob'):null))||null;
-(async()=>{if(AdMob){try{await AdMob.initialize({initializeForTesting:ADS.testing,tagForChildDirectedTreatment:true,tagForUnderAgeOfConsent:true,maxAdContentRating:'General'})}catch(e){}}})();
-let modalEl=null;
-function closeModal(){if(modalEl){modalEl.remove();modalEl=null}}
-function modal(html){closeModal();modalEl=document.createElement('div');modalEl.className='modal';modalEl.innerHTML='<div class="raise mbox">'+html+'</div>';
-  modalEl.addEventListener('click',e=>{if(e.target===modalEl&&!modalEl.dataset.lock)closeModal()});document.body.appendChild(modalEl);return modalEl}
-const adsLeft=()=>{const d=new Date().toDateString();if(S.ads.d!==d)S.ads={d,n:0,t:S.ads.t||0};return ADS.perDay-S.ads.n};
-function demoAd(){
-  return new Promise(res=>{
-    const m=modal(`<div style="font-size:54px">📺</div><h2>Demo ad</h2><p style="color:var(--mute)">In the Android app a real Google ad plays here.</p><div class="star" id="adt" style="display:inline-block">${ADS.demoSecs}</div><button class="cta" id="adc" disabled>Claim reward</button><button class="cta alt" id="ads">Skip (no reward)</button>`);
-    m.dataset.lock='1';let t=ADS.demoSecs;const iv=setInterval(()=>{t--;const e=m.querySelector('#adt');if(e)e.textContent=t>0?t:'✓';if(t<=0){clearInterval(iv);const c=m.querySelector('#adc');if(c)c.disabled=false}},1000);
-    m.querySelector('#adc').onclick=()=>{clearInterval(iv);closeModal();res(true)};
-    m.querySelector('#ads').onclick=()=>{clearInterval(iv);closeModal();res(false)}})}
-function watchAd(){
-  if(!AdMob)return demoAd();
-  return new Promise(async res=>{
-    let rewarded=false,hs=[];const done=v=>{hs.forEach(h=>{try{h.remove()}catch(e){}});res(v)};
-    try{
-      hs.push(await AdMob.addListener('onRewardedVideoAdReward',()=>{rewarded=true}));
-      hs.push(await AdMob.addListener('onRewardedVideoAdDismissed',()=>done(rewarded)));
-      hs.push(await AdMob.addListener('onRewardedVideoAdFailedToLoad',()=>done(false)));
-      hs.push(await AdMob.addListener('onRewardedVideoAdFailedToShow',()=>done(false)));
-      await AdMob.prepareRewardVideoAd({adId:ADS.rewardId||ADS.rewardedId,isTesting:ADS.testing});
-      await AdMob.showRewardVideoAd();
-    }catch(e){done(false)}})}
-function adBlock(){
-  if(adsLeft()<=0)return 'Daily ad limit reached. Come back tomorrow!';
-  const wait=Math.ceil((S.ads.t+ADS.cooldown-Date.now())/1000);return wait>0?'Next ad available in '+wait+'s':''}
-async function adReward(amount,cb){
-  const blocked=adBlock();if(blocked){toast(blocked);cb&&cb(false);return}
-  const ok=await watchAd();
-  if(ok){S.ads.n++;S.ads.t=Date.now();S.coins+=amount;save();sfx('end',1);toast('+'+amount+' 🪙 added!');cb&&cb(true)}
-  else{toast('No reward this time');cb&&cb(false)}}
-function openBuy(k){
-  const t=THEMES.find(x=>x[0]===k),price=PRICE[k],need=price-S.coins;
-  modal(`<div class="tpv" data-theme="${k}" style="margin-bottom:12px"><div class="mc"><b>Aa</b><span></span></div><div class="mb">Preview</div></div><h2>${t[1]}</h2><p style="color:var(--mute);margin:6px 0 12px">${t[2]}</p><div class="star" style="display:inline-block">🪙 ${S.coins} / ${price}</div>`+
-   (need<=0?`<button class="cta green" data-act="buy" data-t="${k}">Unlock for ${price} 🪙</button>`:`<p style="margin:12px 0 0">You need <b>${need}</b> more coins.</p><button class="cta" data-act="ad" data-t="${k}">📺 Watch ad: +${ADS.reward} 🪙</button>`)+
-   `<button class="cta alt" data-act="close">Not now</button>`)}
-function giftInfo(){
-  const today=new Date().toDateString(),y=new Date(Date.now()-864e5).toDateString();
-  if(S.daily.d===today)return{can:false};
-  const streak=S.daily.d===y?S.daily.streak+1:1;return{can:true,streak,reward:[10,10,15,15,20,20,30][Math.min(streak,7)-1]}}
-function giftHtml(){const g=giftInfo();return g.can?`<div class="raise gift"><div><b>🎁 Daily gift</b><small>Day ${g.streak} streak · +${g.reward} 🪙</small></div><button class="cta green" style="margin:0;width:auto;padding:10px 20px" data-act="claim">Claim</button></div>`:''}
-
 /* ===== GAMES ===== */
 let gclean=null;
-const gadd=n=>{S.coins+=Math.min(30,n);save();const e=$('#gstar');if(e)e.textContent='🪙 '+S.coins};
+const gadd=n=>{S.stars+=n;save();const e=$('#gstar');if(e)e.textContent='⭐ '+S.stars};
 const gbest=(id,v)=>{S.gb=S.gb||{};const o=S.gb[id];if(o==null||v>o){S.gb[id]=v;save();return true}return false};
 const gb=id=>(S.gb||{})[id]||0;
 const GAMES=[
@@ -455,16 +397,15 @@ const GAMES=[
  {id:'rps2',name:'Rock Paper Scissors',emoji:'✌️',tint:'#ffc6d9',desc:'Pick in secret, then reveal.',p2:1,mount:rps2}];
 function gamesList(){
   const card=g=>`<button class="gc" data-go="/game/${g.id}"><span class="gi" style="--t:${g.tint}">${g.emoji}</span><b>${g.name}</b><small>${g.desc}</small><span class="bs">${g.p2?'👥 2 players':gb(g.id)?'Best: '+gb(g.id):'New!'}</span></button>`;
-  return `<div class="top"><h1>Games</h1><div class="star">🪙 ${S.coins}</div></div>
+  return `<div class="top"><h1>Games</h1><div class="star">⭐ ${S.stars}</div></div>
   <div class="sechead"><h3>👥 2 Players · one phone</h3></div><div class="tgrid" style="margin-bottom:22px">${GAMES.filter(g=>g.p2).map(card).join('')}</div>
   <div class="sechead"><h3>🙋 1 Player</h3></div><div class="tgrid">${GAMES.filter(g=>!g.p2).map(card).join('')}</div>`}
 function gameScreen(id){
   const g=GAMES.find(x=>x.id===id);if(!g){go('/games');return ''}
-  return `<div class="top"><button class="back" style="position:static" data-go="/games" aria-label="Back">←</button><h1 style="flex:1;margin-left:6px">${g.name}</h1><div class="star" id="gstar">🪙 ${S.coins}</div></div><div class="raise gstage" id="gstage"></div>`}
+  return `<div class="top"><button class="back" style="position:static" data-go="/games" aria-label="Back">←</button><h1 style="flex:1;margin-left:6px">${g.name}</h1><div class="star" id="gstar">⭐ ${S.stars}</div></div><div class="raise gstage" id="gstage"></div>`}
 function endScreen(el,id,score,unit,again){
   const nb=score>0&&gbest(id,score);gadd(score*2);sfx('end',score>0?1:0);
-  el.innerHTML=`<div class="trophy">${nb?'🏆':'🎉'}</div><h2>${score} ${unit}</h2><p style="color:var(--mute)">${nb?'New best score!':'Best: '+gb(id)}</p><p><span class="star" style="display:inline-block">+${Math.min(30,score*2)} 🪙</span></p>${score>0?`<button class="cta green" id="dbl">📺 Watch ad: double it (+${Math.min(30,score*2)} 🪙)</button>`:''}<button class="cta" id="again">Play again</button>`;
-  const db=el.querySelector('#dbl');if(db)db.onclick=()=>adReward(Math.min(30,score*2),ok=>{if(ok){db.remove();const e=$('#gstar');if(e)e.textContent='🪙 '+S.coins}});
+  el.innerHTML=`<div class="trophy">${nb?'🏆':'🎉'}</div><h2>${score} ${unit}</h2><p style="color:var(--mute)">${nb?'New best score!':'Best: '+gb(id)}</p><p><span class="star" style="display:inline-block">+${score*2} ⭐</span></p><button class="cta" id="again">Play again</button>`;
   el.querySelector('#again').onclick=()=>{sfx('tap');again()}}
 const chips=(a)=>`<div class="row2">${a.map(x=>`<span class="star"${x[1]?` id="${x[1]}"`:''}>${x[0]}</span>`).join('')}</div>`;
 
@@ -586,7 +527,7 @@ function ttt2(el){
     const a=el.querySelector('#ag');if(a)a.onclick=()=>{sfx('tap');start()}}
   function play(i){
     if(over||b[i])return;b[i]=turn;sfx('tap');
-    if(WL.some(l=>l.every(k=>b[k]===turn))){over=true;sc[turn]++;gadd(10);sfx('end',2);return draw(em(turn)+' wins!')}
+    if(WL.some(l=>l.every(k=>b[k]===turn))){over=true;sc[turn]++;gadd(5);sfx('end',2);return draw(em(turn)+' wins!')}
     if(b.every(Boolean)){over=true;sc.D++;sfx('end',0);return draw('Draw!')}
     turn=turn==='X'?'O':'X';draw()}
   start()}
@@ -598,7 +539,7 @@ function connect4(el){
   function drop(c){
     if(over)return;let r=R-1;while(r>=0&&g[r][c]!==-1)r--;if(r<0){sfx('wrong');return}
     g[r][c]=turn;sfx('tap');
-    if(win(r,c)){over=true;sc[turn]++;gadd(10);sfx('end',2);return draw((turn?'🟡':'🔴')+' wins!')}
+    if(win(r,c)){over=true;sc[turn]++;gadd(5);sfx('end',2);return draw((turn?'🟡':'🔴')+' wins!')}
     if(g[0].every(x=>x!==-1)){over=true;sfx('end',0);return draw('Draw!')}
     turn=1-turn;draw()}
   function draw(msg){
@@ -615,7 +556,7 @@ function tug(el){
     const md=el.querySelector('#md'),tr=el.querySelector('#tr');
     const paint=()=>{tr.style.background=`linear-gradient(90deg,#3b82f6 ${pos}%,#ef4444 ${pos}%)`};paint();
     const pull=d=>{if(!run)return;pos=Math.max(0,Math.min(100,pos+d));paint();
-      if(pos<=0||pos>=100){run=false;const w=pos>=100?1:2;sfx('end',2);gadd(10);md.textContent='🏆 Player '+w+' wins!';
+      if(pos<=0||pos>=100){run=false;const w=pos>=100?1:2;sfx('end',2);gadd(5);md.textContent='🏆 Player '+w+' wins!';
         el.insertAdjacentHTML('beforeend','<button class="cta" id="ag">Play again</button>');el.querySelector('#ag').onclick=()=>{sfx('tap');start()}}};
     ['1','2'].forEach(k=>el.querySelector('#b'+k).addEventListener('pointerdown',e=>{e.preventDefault();pull(k==='1'?2.2:-2.2)}));
     ['3','2','1','GO!'].forEach((t,i)=>tm.push(setTimeout(()=>{md.textContent=t;sfx(i===3?'correct':'tap');if(i===3)run=true},i*800)))}
@@ -633,7 +574,7 @@ function react(el){
       later(()=>{if(state!=='wait')return;state='go';paint('#22c55e');md.textContent='GO!';sfx('note',3)},1500+Math.random()*2500)}
     function point(p,why){
       state='over';s[p]++;sfx('correct');md.textContent='P'+(p+1)+' scores! '+why+'  '+score();
-      if(s[p]>=3)later(()=>{md.textContent='🏆 Player '+(p+1)+' wins!';gadd(10);sfx('end',2);el.insertAdjacentHTML('beforeend','<button class="cta" id="ag">Play again</button>');el.querySelector('#ag').onclick=()=>{sfx('tap');start()}},900);
+      if(s[p]>=3)later(()=>{md.textContent='🏆 Player '+(p+1)+' wins!';gadd(5);sfx('end',2);el.insertAdjacentHTML('beforeend','<button class="cta" id="ag">Play again</button>');el.querySelector('#ag').onclick=()=>{sfx('tap');start()}},900);
       else later(round,1500)}
     pads.forEach(pd=>pd.addEventListener('pointerdown',e=>{e.preventDefault();const p=+pd.dataset.p;
       if(state==='wait')point(1-p,'(P'+(p+1)+' tapped too early)');else if(state==='go')point(p,'Fast!')}));
@@ -654,7 +595,7 @@ function mathduel(el){
       if(+b.dataset.v===ans){done=true;s[p]++;sfx('correct');b.style.background='var(--okbg)';tm.push(setTimeout(()=>s[p]>=5?end(p):q(),900))}
       else{lock[p]=true;sfx('wrong');b.style.background='var(--badbg)';b.disabled=true;if(lock[0]&&lock[1]){done=true;tm.push(setTimeout(q,800))}}})}
   function end(p){
-    gadd(10);sfx('end',2);
+    gadd(5);sfx('end',2);
     el.innerHTML=`<div class="trophy">🏆</div><h2>Player ${p+1} wins!</h2><p style="color:var(--mute)">P1 ${s[0]} – ${s[1]} P2</p><button class="cta" id="ag">Play again</button>`;
     el.querySelector('#ag').onclick=()=>{sfx('tap');start()}}
   start();return()=>tm.forEach(clearTimeout)}
@@ -674,7 +615,7 @@ function rps2(el){
       lock=true;const r=(ch[0]-ch[1]+3)%3,w=r===1?0:r===2?1:-1;if(w>=0)s[w]++;sfx(w<0?'tap':'correct');
       draw(E[ch[0]]+' vs '+E[ch[1]]+' – '+(w<0?'Draw!':'Player '+(w+1)+' wins the round!'));
       tm.push(setTimeout(()=>{
-        if(s[0]>=3||s[1]>=3){const f=s[0]>=3?0:1;gadd(10);sfx('end',2);
+        if(s[0]>=3||s[1]>=3){const f=s[0]>=3?0:1;gadd(5);sfx('end',2);
           el.innerHTML=`<div class="trophy">🏆</div><h2>Player ${f+1} wins!</h2><p style="color:var(--mute)">P1 ${s[0]} – ${s[1]} P2</p><button class="cta" id="ag">Play again</button>`;
           el.querySelector('#ag').onclick=()=>{sfx('tap');start()}}
         else{ch=[null,null];lock=false;draw('Pick one!')}},1900))}
@@ -766,20 +707,14 @@ document.addEventListener('click',e=>{
   const a=e.target.closest('[data-act]');if(!a||a.disabled)return;
   const act=a.dataset.act;
   if(act==='complete'){const id=a.dataset.id,i=+a.dataset.i;S.done[id]=S.done[id]||[];
-    if(!S.done[id].includes(i)){S.done[id].push(i);S.coins+=15;todayN();S.day.n++;save();toast('+15 🪙 Lesson complete!');sfx('lesson')}else sfx('tap');go('/course/'+id)}
-  else if(act==='pick'){if(Q.picked>=0)return;const k=+a.dataset.k;Q.picked=k;if(k===Q.items[Q.i].a){Q.score++;S.coins+=5;save();sfx('correct')}else sfx('wrong');$('#view').innerHTML=quiz()}
-  else if(act==='next'){if(Q.i===Q.items.length-1){Q.end=true;Q.dbl=false;Q.earned=Q.score*5+(Q.score===Q.items.length?10:0);if(Q.score===Q.items.length)S.coins+=10;const b=S.best[Q.id];if(b==null||Q.score>b)S.best[Q.id]=Q.score;save();sfx('end',Q.score===Q.items.length?2:Q.score>=Q.items.length/2?1:0)}else{Q.i++;Q.picked=-1;sfx('tap')}$('#view').innerHTML=quiz();window.scrollTo(0,0)}
+    if(!S.done[id].includes(i)){S.done[id].push(i);S.stars+=10;todayN();S.day.n++;save();toast('+10 ⭐ Lesson complete!');sfx('lesson')}else sfx('tap');go('/course/'+id)}
+  else if(act==='pick'){if(Q.picked>=0)return;const k=+a.dataset.k;Q.picked=k;if(k===Q.items[Q.i].a){Q.score++;S.stars+=10;save();sfx('correct')}else sfx('wrong');$('#view').innerHTML=quiz()}
+  else if(act==='next'){if(Q.i===Q.items.length-1){Q.end=true;const b=S.best[Q.id];if(b==null||Q.score>b)S.best[Q.id]=Q.score;save();sfx('end',Q.score===Q.items.length?2:Q.score>=Q.items.length/2?1:0)}else{Q.i++;Q.picked=-1;sfx('tap')}$('#view').innerHTML=quiz();window.scrollTo(0,0)}
   else if(act==='retry'){sfx('tap');startQuiz(Q.id);Q.fresh=location.hash;$('#view').innerHTML=quiz();window.scrollTo(0,0)}
   else if(act==='name'){sfx('tap');S.name=($('#nm').value.trim()||'Explorer').slice(0,14);save();toast('Name saved');draw()}
-  else if(act==='theme'){const k=a.dataset.t;
-    if(S.owned.includes(k)){S.theme=k;document.documentElement.dataset.theme=k;save();draw();toast('Theme: '+THEMES.find(t=>t[0]===k)[1]);sfx('theme')}else openBuy(k)}
-  else if(act==='buy'){const k=a.dataset.t,pr=PRICE[k];if(S.coins>=pr&&!S.owned.includes(k)){S.coins-=pr;S.owned.push(k);S.theme=k;document.documentElement.dataset.theme=k;save();closeModal();draw();sfx('end',2);toast('Unlocked '+THEMES.find(t=>t[0]===k)[1]+'!')}}
-  else if(act==='ad'){const k=a.dataset.t;const blocked=adBlock();if(blocked){toast(blocked);return}closeModal();adReward(ADS.reward,()=>{if(k)openBuy(k);else draw()})}
-  else if(act==='close'){closeModal()}
-  else if(act==='claim'){const g=giftInfo();if(g.can){S.daily={d:new Date().toDateString(),streak:g.streak};S.coins+=g.reward;save();sfx('end',1);toast('+'+g.reward+' 🪙 daily gift!');draw()}}
-  else if(act==='qdbl'){adReward(Q.earned,ok=>{if(ok){Q.dbl=true;$('#view').innerHTML=quiz()}})}
+  else if(act==='theme'){S.theme=a.dataset.t;document.documentElement.dataset.theme=S.theme;save();draw();toast('Theme: '+THEMES.find(t=>t[0]===S.theme)[1]);sfx('theme')}
   else if(act==='snd'){S.sound=!S.sound;save();draw();if(S.sound)sfx('tap')}
-  else if(act==='reset'){if(confirm('Reset all progress?')){S={...S,done:{},best:{},gb:{},day:{d:'',n:0}};save();draw();toast('Progress reset')}}
+  else if(act==='reset'){if(confirm('Reset all progress?')){S={name:S.name,done:{},stars:0,best:{},day:{d:'',n:0}};save();draw();toast('Progress reset')}}
 });
 document.addEventListener('input',e=>{if(e.target.id==='vol'){S.vol=e.target.value/100;save()}});
 document.addEventListener('change',e=>{if(e.target.id==='vol')sfx('tap')});
