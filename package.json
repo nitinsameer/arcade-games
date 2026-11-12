@@ -2,10 +2,18 @@
   "name": "style-lab",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@capacitor-community/admob": "^6.2.0",
     "@capacitor/android": "^6.2.0",
     "@capacitor/cli": "^6.2.0",
     "@capacitor/core": "^6.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }

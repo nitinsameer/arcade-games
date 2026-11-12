@@ -1,0 +1,109 @@
+--------- beginning of main
+11-12 07:58:44.782 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:58:44.782 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:58:46.482 14208  8143 I NetworkScheduler.Stats: (REDACTED) Task %s/%s finished executing. cause:%s result: %s elapsed_millis: %s uptime_millis: %s exec_start_elapsed_seconds: %s
+11-12 07:58:46.492 14208 12333 W CCTFlatFileLogStore: Excessive logging: 16 events, 174561 bytes from log source METALOG_COUNTERS last 0s
+11-12 07:58:47.705 12618 12618 I GH.CAR  : onDestroy
+11-12 07:58:47.707 12618 12618 I GH.CAR  : tearDown()
+11-12 07:58:47.707 12618 12618 I GH.CarService: tearDown()
+11-12 07:58:47.707 12618 12618 I GH.DelegateMngCarSvc: tearDown()
+11-12 07:58:52.083 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:58:52.083 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:15.049 12440 12471 I Finsky:background: [26363] Stats for Executor: bgExecutor yjm@6b9e6a5[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 19]
+11-12 07:59:15.058 12440 12471 I Finsky:background: [26363] Stats for Executor: LightweightExecutor yjm@95fda59[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 8]
+11-12 07:59:15.395 12440 12471 I Finsky:background: [26363] Stats for Executor: BlockingExecutor yjm@e252f33[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 5]
+11-12 07:59:16.576 14208 19962 I NearbyDiscovery: FastPair: isDestroyable: Scanner is alive. [CONTEXT service_id=265 ]
+11-12 07:59:16.577 14208 19962 I NearbyDiscovery: DiscoveryService: Skip stopSelf(), fast pair controller is not destroyable. [CONTEXT service_id=265 ]
+11-12 07:59:23.899 12440 12818 I PlayCommon: [26403] Preparing logs for uploading
+11-12 07:59:23.920 12440 12818 I PlayCommon: [26403] Connecting to server for timestamp: https://play.googleapis.com/play/log/timestamp
+11-12 07:59:24.664 12440 12818 I PlayCommon: [26403] Connecting to server: https://play.googleapis.com/play/log?format=raw&proto_v2=true
+11-12 07:59:24.813 12440 12818 I PlayCommon: [26403] Successfully uploaded logs.
+11-12 07:59:29.154 22864 22918 I bluetooth: system/gd/hci/le_address_manager.cc:576 GetNextPrivateAddressIntervalRange: client=LeAddressManager, nonwake=8m11s, wake=13m54s
+11-12 07:59:29.187 22864 22918 I bluetooth: system/gd/hci/le_address_manager.cc:777 OnCommandComplete: Received command complete with op_code LE_SET_RANDOM_ADDRESS(0x2005)
+11-12 07:59:29.188 22864 22918 I bluetooth: system/gd/hci/le_address_manager.cc:797 OnCommandComplete: update random address : xx:xx:xx:xx:a7:c0
+11-12 07:59:29.188 22864 22918 I bluetooth: system/gd/hci/le_address_manager.cc:392 resume_registered_clients: Resuming registered clients
+11-12 07:59:36.732 14208 12333 I AlarmManager: setExactAndAllowWhileIdle [name: FcmRetry type: 2 triggerAtMillis: 1105964426]
+11-12 07:59:36.824  7374  7374 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~mNElKnyALDKSuGHJ8bJkkQ==/com.openai.chatgpt-gI7hDKF5qTnq-nBKR1XpUw==/oat/arm64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-12 07:59:36.824  7374  7374 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~mNElKnyALDKSuGHJ8bJkkQ==/com.openai.chatgpt-gI7hDKF5qTnq-nBKR1XpUw==/oat/arm64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+11-12 07:59:37.401 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:37.401 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:37.757 14208 14263 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+11-12 07:59:38.088 14208 10691 I PhenotypeResourceReader: unable to find any Phenotype resource metadata for com.openai.chatgpt
+11-12 07:59:38.110 14208 12333 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-12 07:59:38.120 14208 12333 I Blockstore: [EncryptedCloudSyncManager] no backup account found. [CONTEXT service_id=258 ]
+11-12 07:59:38.123 14208 13190 W ChimeraUtils: Module com.google.android.gms.backup_base missing resource null(0)
+11-12 07:59:38.127 14208 13190 I Backup  : [BackupAccountNotifier] Not showing notification - waiting until 4939122216374.
+--------- beginning of system
+11-12 07:59:38.289  5533  5533 W LocaleConfig: The resource file pointed to by the given resource ID isn't found.
+11-12 07:59:38.298  5533  5533 I id.ext.services: AssetManager2(0xb4000073a182f5d8) locale list changing from [] to [en-US]
+11-12 07:59:39.068 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:39.068 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:42.441 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:42.441 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:42.441 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:42.442 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:43.519  9782  9820 I PermissionControllerServiceImpl: Updating user sensitive for uid 11507
+11-12 07:59:43.531 13461 13496 I droid.launcher3: AssetManager2(0xb4000073a18d5938) locale list changing from [] to [en-US]
+11-12 07:59:43.565 13461 13482 D SQLiteQueryBuilder: SELECT * FROM attribute WHERE (intent=? AND itemType=?)
+11-12 07:59:43.663 27564 27564 W fb4a.AppComponentFactory: Instantiating Service
+11-12 07:59:43.762 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.762 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.762 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.762 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.763 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.763 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.763 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.763 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.764 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.764 27564 11398 W fb4a.VersionStringComparator: [AI] Failed to parse integer from string
+11-12 07:59:43.943 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a19a7ed8) locale list changing from [] to [en-US]
+11-12 07:59:43.985 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a194bef8) locale list changing from [] to [en-US]
+11-12 07:59:44.008 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.019 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.026 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.044 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.050 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.056 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.061 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.096 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a19347f8) locale list changing from [] to [en-US]
+11-12 07:59:44.099 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:44.099 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:44.100 32454 28324 I fkan    : (REDACTED) HDM. appOpsListener %s %s
+11-12 07:59:44.100 32454 28324 I fkan    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+11-12 07:59:44.114 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.131 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a19d6ff8) locale list changing from [] to [en-US]
+11-12 07:59:44.147 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.276 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a1918c38) locale list changing from [] to [en-US]
+11-12 07:59:44.286 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.356 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a195cbb8) locale list changing from [] to [en-US]
+11-12 07:59:44.428 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a19de398) locale list changing from [] to [en-US]
+11-12 07:59:44.484 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a1969d18) locale list changing from [] to [en-US]
+11-12 07:59:44.494 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.499 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.889 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a1a0fa38) locale list changing from [] to [en-US]
+11-12 07:59:44.925 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:44.988 13461 13636 I droid.launcher3: AssetManager2(0xb4000073a199f238) locale list changing from [] to [en-US]
+11-12 07:59:45.010 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:45.028 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:45.047 13461 13636 W HWUI    : Image decoding logging dropped!
+11-12 07:59:45.169 29209 29484 W System.err: java.io.InvalidClassException: com.hankcs.hanlp.collection.trie.DoubleArrayTrie; local class incompatible: stream classdesc serialVersionUID = 548566090949949469, local class serialVersionUID = 6385943368503821062
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:652)
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:1743)
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1624)
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1902)
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1442)
+11-12 07:59:45.207 29209 29484 W System.err: 	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:430)
+11-12 07:59:45.207 29209 29484 W System.err: 	at g5.gde.gdg(SegmentCutMain.java:48)
+11-12 07:59:45.207 29209 29484 W System.err: 	at g5.gde.gdf(SegmentCutMain.java:324)
+11-12 07:59:45.207 29209 29484 W System.err: 	at e5.gda.gda(QueryUnderstandingMainProcess.java:31)
+11-12 07:59:45.207 29209 29484 W System.err: 	at d5.gda.gda(SearchAlgorithmInit.java:95)
+11-12 07:59:45.207 29209 29484 W System.err: 	at c5.gda.gdb(SearchAlgorithm.java:1)
+11-12 07:59:45.207 29209 29484 W System.err: 	at com.vivo.globalsearch.model.algorithm.AlgorithmManager$initAlgorithm$1.invokeSuspend(AlgorithmManager.kt:344)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:12)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlinx.coroutines.u.run(DispatchedTask.kt:130)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler.gdz(CoroutineScheduler.kt:1)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$gdc.gdd(CoroutineScheduler.kt:15)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$gdc.gdp(CoroutineScheduler.kt:29)
+11-12 07:59:45.208 29209 29484 W System.err: 	at kotlinx.coroutines.scheduling.CoroutineScheduler$gdc.run(CoroutineScheduler.kt:1)
+11-12 07:59:45.208 29209 29484 W System.err: java.io.InvalidClassException: com.hankcs.hanlp.collection.trie.DoubleArrayTrie; local class incompatible: stream classdesc serialVersionUID = 548566090949949469, local class serialVersionUID = 6385943368503821062
+11-12 07:59:46.774 14208 14208 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.libs.gmscorelogger.service.START dat=chimera-action:/... xflg=0x4 cmp=com.google.android.gms/.chimera.PersistentDirectBootAwareApiService }

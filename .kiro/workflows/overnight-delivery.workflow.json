@@ -1,0 +1,167 @@
+{
+  "version": "v1",
+  "name": "Overnight Delivery Workflow",
+  "description": "Complete autonomous development workflow: plan → implement → test → review → deliver with max 3 fix-test cycles",
+  "trigger": "manual",
+  "agents": {
+    "wf-planner": "Inspects repo, writes implementation plan, no code changes",
+    "wf-coder": "Implements approved changes, adds tests, maintains functionality",
+    "wf-code-reviewer": "Reviews code quality, architecture, security independently",
+    "wf-qa": "Runs builds, tests, regression tests, device testing"
+  },
+  "steps": [
+    {
+      "id": "intake",
+      "name": "Task Intake & Scope Definition",
+      "agent": "wf-planner",
+      "prompt": "You are the Arcade Planner. Your task is to:\n\n1. Read and understand the task description carefully\n2. Inspect the arcade-games repository structure\n3. Review existing games (2-3 examples) to understand patterns\n4. Identify all acceptance criteria\n5. List any dependencies or blockers\n6. Create a detailed implementation plan with:\n   - Architecture overview\n   - Step-by-step implementation checklist\n   - Code patterns and examples\n   - Testing strategy\n   - Risk assessment\n   - Feasibility determination (go/no-go)\n\nDeliverables:\n- arcade-plan-[feature].md with complete implementation plan\n- Go/no-go recommendation\n- Any identified risks or blockers\n\nReference: .kiro/agents/arcade-planner.md for detailed responsibilities",
+      "deliverables": ["implementation-plan.md"],
+      "timeout": 1800
+    },
+    {
+      "id": "lead-scope-review",
+      "name": "Lead Reviews Scope & Plan",
+      "agent": "wf-lead",
+      "prompt": "You are the Arcade Lead. Review the planner's work:\n\n1. Read the implementation plan thoroughly\n2. Verify scope is clear and matches task requirements\n3. Identify any blockers or risks\n4. Check feasibility determination\n5. Approve plan OR request revisions\n6. Create scope summary document\n\nDeliverables:\n- Scope summary approval (go/no-go)\n- Any identified scope issues\n- Lead sign-off for development to begin\n\nReference: .kiro/agents/arcade-lead.md for scope definition responsibilities",
+      "deliverables": ["scope-summary.md"],
+      "timeout": 600
+    },
+    {
+      "id": "development",
+      "name": "Development: Implement Feature",
+      "agent": "wf-coder",
+      "prompt": "You are the Arcade Developer. Implement the feature per the approved plan:\n\n1. Create feature branch: git checkout -b feature/[feature-name]\n2. Follow implementation plan step-by-step\n3. Implement code in www/index.html\n4. Test incrementally after each major section\n5. Verify all 15 existing games still work (regression)\n6. Make atomic commits (2-5 commits, clear messages)\n7. Push to feature branch\n\nDeliverables:\n- Commits on feature branch\n- All acceptance criteria implemented\n- Regression testing completed and documented\n\nReference: .kiro/agents/arcade-developer.md for implementation responsibilities",
+      "deliverables": ["code-changes.md"],
+      "timeout": 3600
+    },
+    {
+      "id": "parallel-testing",
+      "name": "Parallel: Testing & Review",
+      "type": "parallel",
+      "branches": [
+        {
+          "id": "qa-testing",
+          "name": "QA: Build & Test",
+          "agent": "wf-qa",
+          "prompt": "You are the Arcade QA. Test the implementation:\n\n1. Verify build succeeds:\n   - npm install completes\n   - npx cap sync android succeeds\n   - APK builds without errors\n   - APK file size reasonable (5-7 MB)\n\n2. Run all automated tests (if framework exists)\n\n3. Manual regression testing:\n   - Test all 15 games for 30+ seconds each\n   - Document each game: PASS / FAIL / BLOCKED\n\n4. Device testing:\n   - Install APK on Android device (6.0+)\n   - App launches without errors\n   - Feature works as expected\n   - No crashes detected\n   - Audio/themes work correctly\n\n5. Report any defects with:\n   - Reproduction steps\n   - Severity (CRITICAL/HIGH/MEDIUM/LOW)\n   - Impact assessment\n\nDeliverables:\n- Build verification report\n- Regression test results (all 15 games)\n- Device test report\n- Defect list (if any)\n\nReference: .kiro/agents/arcade-qa.md for testing responsibilities",
+          "deliverables": ["test-results.md"],
+          "timeout": 2400
+        },
+        {
+          "id": "code-review",
+          "name": "Review: Code Quality & Architecture",
+          "agent": "wf-code-reviewer",
+          "prompt": "You are the Arcade Reviewer. Review the code changes:\n\n1. Code quality audit:\n   - No hardcoded values\n   - All user input sanitized (esc())\n   - State changes use spread syntax (not mutation)\n   - No console.log() in production\n   - No unused variables\n   - Comments explain complex logic\n   - Code follows conventions\n\n2. Architecture audit:\n   - Game lifecycle correct (Start → Playing → End)\n   - Local gameState only (not in global S)\n   - High scores correctly updated (S.gb[gameId])\n   - Audio integration theme-aware\n   - Navigation works correctly\n   - State persists via save()\n\n3. Security & privacy audit:\n   - No personal data collection\n   - No third-party tracking\n   - No external web navigation\n   - No prohibited permissions\n   - Input validation prevents injection\n\n4. Regression impact:\n   - No changes to existing games (unless intended)\n   - No state corruption\n   - No theme issues\n   - Navigation still works\n\n5. Maintainability:\n   - Code is understandable\n   - Functions reasonably sized\n   - Reuses existing patterns\n   - No premature optimization\n\nDeliverables:\n- Code review report\n- Approval OR request changes\n- List of any issues found\n\nReference: .kiro/agents/arcade-reviewer.md for review responsibilities",
+          "deliverables": ["code-review.md"],
+          "timeout": 1800
+        }
+      ]
+    },
+    {
+      "id": "lead-integration-check",
+      "name": "Lead: Integration Assessment",
+      "agent": "wf-lead",
+      "prompt": "You are the Arcade Lead. Assess integration and quality gate status:\n\n1. Review QA test results\n   - Build status: PASS / FAIL\n   - Regression results: all 15 games working?\n   - Device testing: successful?\n   - Defects: any CRITICAL or HIGH issues?\n\n2. Review code review\n   - Code approved?\n   - Architecture sound?\n   - Security/privacy OK?\n   - Any blocking issues?\n\n3. Compare against acceptance gates (06-acceptance-gates.md):\n   - Gate 1: Feature Completeness\n   - Gate 2: Regression Testing\n   - Gate 3: Tests\n   - Gate 4: Linting & Build\n   - Gate 5: Android Build\n   - Gate 6: Device Testing\n   - Gate 7: Defect Review\n   - Gate 8: Privacy Compliance\n   - Gate 9: Documentation\n   - Gate 10: Git Status\n\n4. Make integration decision:\n   - ALL gates PASS → Approve for merge\n   - ANY gate FAIL → Request fixes (go to fix cycle)\n   - ANY gate BLOCKED → Escalate blockers\n\nDeliverables:\n- Integration assessment report\n- Gate-by-gate status summary\n- Go/no-go recommendation\n\nReference: .kiro/agents/arcade-lead.md for integration responsibilities",
+      "deliverables": ["integration-report.md"],
+      "timeout": 600
+    },
+    {
+      "id": "fix-cycle-check",
+      "name": "Decision: Pass All Gates?",
+      "type": "conditional",
+      "condition": "integration-report.md contains 'APPROVED FOR MERGE'",
+      "onTrue": "final-acceptance",
+      "onFalse": "fix-development"
+    },
+    {
+      "id": "fix-development",
+      "name": "Fix Cycle: Address Failures (Max 3 Cycles)",
+      "type": "loop",
+      "maxIterations": 3,
+      "steps": [
+        {
+          "id": "identify-fixes",
+          "name": "Lead: Identify Fixes Needed",
+          "agent": "wf-lead",
+          "prompt": "You are the Arcade Lead. Based on test and review failures:\n\n1. Identify which gates failed\n2. For each failure, determine:\n   - What specifically failed\n   - Who should fix it (developer, or configuration/build issue)\n   - Is it fixable, or is work blocked?\n3. Document fixes needed in priority order\n4. If fixes are complex or scope changes, escalate\n5. If all issues are unfixable, recommend stopping\n\nDeliverables:\n- List of fixes needed\n- Priority and assignment\n- Blockers or escalations if any",
+          "deliverables": ["fixes-needed.md"],
+          "timeout": 300
+        },
+        {
+          "id": "developer-fixes",
+          "name": "Developer: Implement Fixes",
+          "agent": "wf-coder",
+          "prompt": "You are the Arcade Developer. Fix the identified issues:\n\n1. Read fixes-needed.md\n2. Make targeted fixes (not full refactor)\n3. Test fixes locally\n4. Commit fixes to feature branch\n5. Push updates\n6. Document changes made\n\nDeliverables:\n- Fixed code committed to branch\n- Brief summary of fixes made",
+          "deliverables": ["fixes-applied.md"],
+          "timeout": 1800
+        },
+        {
+          "id": "retest-after-fix",
+          "name": "QA: Retest After Fixes",
+          "agent": "wf-qa",
+          "prompt": "You are the Arcade QA. Retest the fixed code:\n\n1. Run same build verification\n2. Run same test suite\n3. Run same regression tests\n4. Run same device testing\n5. Check if identified issues are resolved\n6. Report new findings\n\nDeliverables:\n- Updated test results\n- Status of each previously-failed gate",
+          "deliverables": ["retest-results.md"],
+          "timeout": 2400
+        },
+        {
+          "id": "rereview-after-fix",
+          "name": "Reviewer: Rereview After Fixes",
+          "agent": "wf-code-reviewer",
+          "prompt": "You are the Arcade Reviewer. Review the fixes:\n\n1. Review only the changed code\n2. Verify fixes address review comments\n3. Check for new issues introduced\n4. Approve fixes OR request further changes\n\nDeliverables:\n- Review of fixes\n- Approval or further issues",
+          "deliverables": ["fix-review.md"],
+          "timeout": 900
+        },
+        {
+          "id": "lead-check-fixed",
+          "name": "Lead: Check if Fixed",
+          "agent": "wf-lead",
+          "prompt": "You are the Arcade Lead. Assess if fixes resolved the issues:\n\n1. Review updated test results\n2. Review updated code review\n3. Check acceptance gates again\n4. If ALL gates now PASS → Exit loop to final acceptance\n5. If gates still fail → Continue loop (or stop if unfixable)\n\nDeliverables:\n- Status of all gates after fixes\n- Continue or stop decision",
+          "deliverables": ["fix-status.md"],
+          "timeout": 300
+        }
+      ],
+      "breakCondition": "All acceptance gates PASS or unfixable blocker identified"
+    },
+    {
+      "id": "final-acceptance",
+      "name": "Final: Create Acceptance Report",
+      "agent": "wf-lead",
+      "prompt": "You are the Arcade Lead. Create the final acceptance report:\n\n1. Verify ALL acceptance gates PASS:\n   - Gate 1: Feature Completeness ✅\n   - Gate 2: Regression Testing ✅\n   - Gate 3: Tests ✅\n   - Gate 4: Linting & Build ✅\n   - Gate 5: Android Build ✅\n   - Gate 6: Device Testing ✅\n   - Gate 7: Defect Review ✅\n   - Gate 8: Privacy Compliance ✅\n   - Gate 9: Documentation ✅\n   - Gate 10: Git Status ✅\n\n2. Compile final acceptance report:\n   - Feature name and scope\n   - All 10 gates with status\n   - What was implemented\n   - Known issues (if any)\n   - Build artifacts info\n   - Git commit info\n   - Sign-offs from all agents\n\n3. Create changed files list\n4. Create test results summary\n5. Generate build artifact info\n\nDeliverables:\n- acceptance-report.md\n- changed-files.md\n- test-results-summary.md\n- build-artifact-info.md\n- known-issues.md (if any)\n\nReference: 06-acceptance-gates.md for gate definitions",
+      "deliverables": ["acceptance-report.md", "changed-files.md", "test-results.md", "build-artifacts.md"],
+      "timeout": 600
+    },
+    {
+      "id": "create-pull-request",
+      "name": "Create GitHub Pull Request",
+      "agent": "wf-coder",
+      "prompt": "You are the Arcade Developer. Create the GitHub pull request:\n\n1. Feature branch: feature/[feature-name]\n2. Target: develop branch (NOT main)\n3. Title: [Feature Name] - [Brief Description] (max 70 chars)\n4. Description:\n   - Summary of changes\n   - Acceptance criteria met\n   - Testing performed\n   - Known issues (if any)\n   - Link to acceptance report\n   - Sign-off: Passed all 10 acceptance gates\n\n5. Use gh CLI: gh pr create --title \"...\" --body \"...\"\n\nDeliverables:\n- GitHub PR URL\n- PR number\n- PR created successfully",
+      "deliverables": ["pull-request.md"],
+      "timeout": 600
+    },
+    {
+      "id": "final-summary",
+      "name": "Overnight Delivery: COMPLETE",
+      "agent": "wf-lead",
+      "prompt": "You are the Arcade Lead. Summarize the completed delivery:\n\n1. All tasks completed:\n   - ✅ Task intake & scope\n   - ✅ Implementation plan\n   - ✅ Feature developed\n   - ✅ QA testing (regression, device)\n   - ✅ Code review (independent)\n   - ✅ Acceptance gates verified (all 10 PASS)\n   - ✅ Pull request created\n\n2. Create final summary:\n   - Feature: [name]\n   - Status: READY FOR MERGE\n   - Build: [APK info]\n   - PR: [URL]\n   - All 15 games: Working\n   - Device tested: Yes\n   - No blockers: Yes\n   - Ready for production: Yes\n\n3. Next steps:\n   - PR review on GitHub\n   - Merge to develop when approved\n   - Optionally: Build and deploy to staging/production\n\nDeliverables:\n- Final delivery summary",
+      "deliverables": ["delivery-summary.md"],
+      "timeout": 300
+    }
+  ],
+  "artifacts": {
+    "implementation-plan.md": "Detailed step-by-step plan created by Planner",
+    "acceptance-report.md": "Final report with all 10 gates status",
+    "changed-files.md": "List of all modified files",
+    "test-results.md": "All test results (build, regression, device)",
+    "build-artifacts.md": "APK info and location",
+    "pull-request.md": "GitHub PR URL and status",
+    "known-issues.md": "Any deferred work or issues"
+  },
+  "configuration": {
+    "timezone": "UTC",
+    "notifyOnCompletion": true,
+    "notifyOnError": true,
+    "retryFailedSteps": false,
+    "maxConcurrentSteps": 2,
+    "defaultTimeout": 1800
+  }
+}

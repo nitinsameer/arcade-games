@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Style Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&family=Space+Grotesk:wght@500;700&family=Orbitron:wght@700;900&family=Press+Start+2P&family=VT323&family=Patrick+Hand&family=Caveat:wght@700&family=Share+Tech+Mono&family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme]{--bg:#ece8fb;--bgc:#ece8fb;--card:#f7f4ff;--ink:#2d2650;--mute:#7a72a8;--accent:#7c5cf0;--accentg:linear-gradient(135deg,#8b6cf6,#6a4fe0);--onacc:#fff;--green:#5cc46b;--greeng:linear-gradient(135deg,#6fd37e,#4cb85c);
+--r:26px;--rs:20px;--bd:0;--bdt:0;--blur:none;--well:#ece8fb;--barfill:#ffd66b;
+--sh:9px 9px 20px rgba(124,100,200,.26),-7px -7px 16px rgba(255,255,255,.95),inset -4px -4px 9px rgba(110,90,190,.13),inset 4px 4px 9px rgba(255,255,255,.8);
+--shs:5px 5px 11px rgba(124,100,200,.26),-3px -3px 8px rgba(255,255,255,.95),inset -3px -3px 7px rgba(110,90,190,.13),inset 3px 3px 7px rgba(255,255,255,.8);
+--sin:inset 3px 3px 7px rgba(110,90,190,.16),inset -3px -3px 7px rgba(255,255,255,.85);
+--sht:7px 7px 15px rgba(124,100,200,.26),-5px -5px 11px rgba(255,255,255,.95),inset -5px -5px 10px rgba(0,0,0,.1),inset 5px 5px 10px rgba(255,255,255,.55);
+--shbtn:7px 7px 15px rgba(124,100,200,.26),-5px -5px 11px rgba(255,255,255,.95),inset -5px -5px 10px rgba(0,0,0,.22),inset 5px 5px 10px rgba(255,255,255,.3);
+--tilebg:var(--t);--tilec:#2d2650;--curbg:linear-gradient(135deg,#d9ccff,#c4b2ff);--curc:#2d2650;--okbg:#c9f2d3;--okc:#173d20;--badbg:#ffd0d0;--badc:#5a1a1a;--lvlbg:#ffd9b0;--lvlc:#7a3d00;
+--navbg:var(--bgc);--navsh:0 -8px 20px rgba(124,100,200,.26);--font:'Nunito',system-ui,sans-serif;--fonth:'Nunito',system-ui,sans-serif;--tsh:none}
+</style>
+<style>
+/* Core layout styles */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-weight:600}
+button{font:inherit;color:inherit;cursor:pointer;border:0;text-align:left}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.phone{max-width:480px;margin:0 auto;padding:18px 18px calc(110px + env(safe-area-inset-bottom,0px))}
+.raise,.row,.les,.opt,.tile,.star,.back,.cta.alt,nav{backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur)}
+.raise{background:var(--card);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--bgc);padding:11px 20px;border-radius:99px;font-weight:800;transition:.25s;pointer-events:none;z-index:9}.toast.show{transform:translate(-50%,0);opacity:1}
+nav{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;padding:10px 10px calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-around;gap:4px;z-index:5;background:var(--navbg);border-top:var(--bd);border-radius:26px 26px 0 0;box-shadow:var(--navsh)}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 1px;border-radius:var(--rs);font-size:10px;font-weight:800;color:var(--mute);background:transparent;text-align:center}
+nav button span{font-size:21px}
+nav button.on{color:var(--accent);background:var(--card);border:var(--bdt);box-shadow:var(--shs)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="phone" id="view"></div>
+<nav id="nav" aria-label="Main"></nav>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

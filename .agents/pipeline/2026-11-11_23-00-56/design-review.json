@@ -1,0 +1,159 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "reviewDate": "2026-11-11",
+  "designVersion": "1.0",
+  "findingsSummary": {
+    "HIGH": 5,
+    "MEDIUM": 3,
+    "NIT": 2,
+    "total": 10
+  },
+  "findings": [
+    {
+      "id": 1,
+      "severity": "HIGH",
+      "type": "Missing Specification",
+      "title": "Vite Build Output Format Undefined",
+      "location": "Requirement 9, Module Structure diagram",
+      "problem": "Design claims 'single www/index.html' but Vite's default output (dist/ with hashed assets) is incompatible with Capacitor. No vite.config.js provided.",
+      "impact": "Capacitor sync will fail during Android build (blocker)",
+      "fix": "Specify vite.config.js with outDir: '../www' and rollupOptions for asset naming. Clarify output structure."
+    },
+    {
+      "id": 2,
+      "severity": "HIGH",
+      "type": "Unvalidated Assumption",
+      "title": "Game Lifecycle Refactoring Unvalidated",
+      "location": "Game Modules (15 Games), src/games/runner.js",
+      "problem": "Design assumes all 15 games map to create/mount/pause/resume/destroy lifecycle without gameplay changes. No baseline test provided.",
+      "impact": "If gameplay breaks, root cause cannot be isolated. Violates regression testing requirement.",
+      "fix": "Add Phase 0: Execute baseline playtest on all 15 games before modularization. Document win/loss conditions, scoring, high score persistence per game."
+    },
+    {
+      "id": 3,
+      "severity": "HIGH",
+      "type": "Incomplete Specification",
+      "title": "Storage Validation Schema Incomplete",
+      "location": "src/storage.js, validateState() function",
+      "problem": "Design lists 8 fields but current app has 14 fields (owned, avatar, ownedAv, pw, daily, ads, best, day not documented). Incomplete validation risks data loss on migration.",
+      "impact": "User data (theme unlocks, power-ups, daily streaks) could be silently lost during first load.",
+      "fix": "Expand defaultState and validateState() with complete 14-field schema. Include type checks and default values for all fields."
+    },
+    {
+      "id": 4,
+      "severity": "HIGH",
+      "type": "Missing Data",
+      "title": "Game Registry Not Fully Specified",
+      "location": "src/games/registry.js, GAMES array example",
+      "problem": "Design shows 2 games (Simon, RPS) but app has 15 games. Complete game list not provided. Implementation requires manual extraction from existing HTML.",
+      "impact": "Risk of missing games, typos in IDs, or inconsistent metadata during manual extraction.",
+      "fix": "List all 15 games in design with correct IDs, names, emojis, tints, descriptions, and p2 flags."
+    },
+    {
+      "id": 5,
+      "severity": "HIGH",
+      "type": "Missing Specification",
+      "title": "Audio Context Cleanup Unspecified",
+      "location": "src/audio/context.js",
+      "problem": "Design initializes audio context but never specifies cleanup. Oscillators, gains, buffer sources may accumulate if not explicitly stopped, causing memory leaks.",
+      "impact": "Extended play sessions (1+ hours) may crash app or become unresponsive. Violates cleanup requirement.",
+      "fix": "Add stopAllAudio() and cleanupAudioContext() functions. Specify that sfx() oscillators are automatically .stop()'d within their duration. Document lifecycle."
+    },
+    {
+      "id": 6,
+      "severity": "MEDIUM",
+      "type": "Ambiguous Specification",
+      "title": "Route Parameter Parsing Unspecified",
+      "location": "src/router.js, parseRoute() function",
+      "problem": "Design shows routes like /game/:id and /lesson/:id/:i but doesn't specify parameter extraction or validation. Invalid routes (e.g., /game/invalid) behavior undefined.",
+      "impact": "Implementation will guess at parsing logic. Invalid routes could silently fail or access wrong content.",
+      "fix": "Provide parseRoute() pseudocode or implementation. Specify fallback behavior for invalid routes (redirect to /home). Validate gameId and lessonIndex."
+    },
+    {
+      "id": 7,
+      "severity": "MEDIUM",
+      "type": "Ambiguous Scope",
+      "title": "UI Components Module Scope Unclear",
+      "location": "Requirement 8: UI Components Module (Optional)",
+      "problem": "Design marks extraction as 'optional' but provides no criteria for when to extract. Developer may over-engineer or skip extraction entirely.",
+      "impact": "Inconsistent abstraction decisions across game modules; reduced maintainability.",
+      "fix": "Clarify: Extract only if 3+ games duplicate identical patterns. Otherwise mark NOT APPLICABLE. Document YAGNI principle."
+    },
+    {
+      "id": 8,
+      "severity": "MEDIUM",
+      "type": "Missing Specification",
+      "title": "Theme Application Lifecycle Unspecified",
+      "location": "src/bootstrap.js, src/themes/css-variables.js",
+      "problem": "Design says 'apply theme' but doesn't specify: Does page re-render? Does CSS cascade re-evaluate? Does audio theme update synchronously?",
+      "impact": "Theme switching could visually glitch if CSS custom properties don't cascade correctly.",
+      "fix": "Clarify: document.documentElement.dataset.theme = themeId triggers CSS cascade automatically. Audio theme (SND) updates on next sfx() call."
+    },
+    {
+      "id": 9,
+      "severity": "NIT",
+      "type": "Documentation",
+      "title": "Module Dependencies Diagram Incomplete",
+      "location": "Module Dependencies (Import Graph)",
+      "problem": "Diagram doesn't show all imports (e.g., does game/runner import storage, audio, events?). Circular dependencies not flagged.",
+      "impact": "Low risk; minimal implementation difficulty. Developer can infer from context.",
+      "fix": "Enhance diagram to show all transitive dependencies including storage, audio, utils imports for each module."
+    },
+    {
+      "id": 10,
+      "severity": "NIT",
+      "type": "Traceability",
+      "title": "Acceptance Criteria to Module Mapping Missing",
+      "location": "Design sections vs. Requirements Acceptance Criteria",
+      "problem": "Design doesn't map which module satisfies which AC (e.g., AC #23 'themes apply without glitch' → which module verifies?). Traceability unclear.",
+      "impact": "Minimal; developer can infer. Affects only documentation clarity.",
+      "fix": "Add AC-to-module mapping table in design for traceability and verification."
+    }
+  ],
+  "verifiedAssumptions": [
+    "Monolithic 794-line HTML file structure confirmed",
+    "12 SUBJECTS with lessons/quizzes present",
+    "19 THEMES with complete CSS variable system present",
+    "Single state object S with localStorage persistence works",
+    "Game high scores in S.gb, lesson completion in S.done",
+    "Web Audio API synthesis with theme-aware parameters working",
+    "Design preserves all subjects, themes, no feature changes",
+    "Vite is appropriate for vanilla JS (confirmed lightweight, Vue-agnostic)",
+    "Capacitor + Android setup remains unchanged",
+    "Coding conventions (camelCase, arrow functions) align with workspace rules"
+  ],
+  "unverifiedAssumptions": [
+    {
+      "assumption": "All 15 games can be refactored to create/mount/pause/resume/destroy lifecycle without gameplay changes",
+      "status": "UNVERIFIED",
+      "risk": "HIGH",
+      "evidence": "No baseline playtest provided; regression detection impossible"
+    },
+    {
+      "assumption": "Vite bundling produces single www/index.html compatible with Capacitor",
+      "status": "UNVERIFIED",
+      "risk": "HIGH",
+      "evidence": "No vite.config.js provided; default Vite output (dist/ structure) incompatible with Capacitor"
+    },
+    {
+      "assumption": "Game modules independently importable without circular dependencies",
+      "status": "UNVERIFIED",
+      "risk": "MEDIUM",
+      "evidence": "Only Simon example provided; other 14 games pattern not validated"
+    }
+  ],
+  "nextSteps": [
+    "Designer revises design addressing all HIGH and MEDIUM findings",
+    "Resubmit as 02-design-v2.md for re-review",
+    "If approved: Planner creates implementation plan with Phase 0 baseline",
+    "Developer begins with baseline verification before modularization code"
+  ],
+  "approvalEligibility": false,
+  "blockers": [
+    "Vite build configuration must be fully specified (Finding 1)",
+    "Game lifecycle refactoring must be baselined first (Finding 2)",
+    "Storage schema must be complete (Finding 3)",
+    "Game registry must list all 15 games (Finding 4)",
+    "Audio cleanup must be specified (Finding 5)"
+  ]
+}
